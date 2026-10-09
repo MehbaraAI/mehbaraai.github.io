@@ -192,28 +192,9 @@ h2.title{font-family:var(--serif); font-size:clamp(32px,4.2vw,46px); line-height
 /* Slots */
 .slot-meta{display:flex; gap:6px 24px; flex-wrap:wrap; color:var(--muted); font-size:15px; margin-top:20px}
 .slot-meta b{color:var(--ink); font-weight:600}
-.events{display:flex; flex-direction:column; gap:12px; margin-top:28px}
-.event{display:grid; grid-template-columns:auto 1fr auto; gap:22px; align-items:center;
-  background:var(--card); border:1px solid var(--line); border-radius:16px; padding:18px 22px; box-shadow:var(--shadow)}
-.event{transition:box-shadow .2s, transform .2s}
-.event:hover{box-shadow:var(--shadow-hover); transform:translateY(-1px)}
-.event.first{border-color:var(--gold)}
-.badge{width:62px; height:66px; border-radius:12px; background:var(--alt); border:1px solid var(--line);
-  display:flex; flex-direction:column; align-items:center; justify-content:center; line-height:1}
-.badge b{font-size:25px; font-weight:600; font-variant-numeric:tabular-nums}
-.badge span{font-size:12px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:var(--gold-ink); margin-top:6px}
-.event h3{font-size:17.5px; font-weight:600}
-.event .meta{font-size:14.5px; color:var(--muted); margin-top:3px}
-.event .theme{display:inline-block; font-size:14px; color:var(--gold-ink); margin-top:6px}
-.status{display:inline-block; font-size:11.5px; font-weight:600; letter-spacing:.06em; text-transform:uppercase;
-  border-radius:999px; padding:2px 9px; margin-inline-start:8px; vertical-align:2px}
-.status.open{background:var(--gold-soft); color:var(--gold-ink)}
-.status.taken{background:var(--deep); color:var(--on-deep)}
-:root[lang="ar"] .status{letter-spacing:0}
-@media (max-width:640px){
-  .event{grid-template-columns:auto 1fr; gap:12px 16px; padding:16px}
-  .event .btn{grid-column:1 / -1; justify-self:start}
-}
+.luma-embed{margin-top:28px; background:var(--card); border:1px solid var(--line); border-radius:16px; overflow:hidden; box-shadow:var(--shadow)}
+.luma-embed iframe{display:block; width:100%; height:450px; border:0}
+@media (max-width:640px){ .luma-embed iframe{height:520px} }
 
 /* Apply */
 .apply-grid{display:grid; grid-template-columns:.9fr 1.1fr; gap:48px; align-items:start}
@@ -375,8 +356,8 @@ footer{border-top:1px solid var(--line); padding-block:36px}
       <span id="slot-time">21:00 Makkah time</span>
       <span data-i18n="slotLen">45–75 minutes · Arabic or English · Online</span>
     </div>
-    <div class="events" id="events">
-      <noscript><p class="lead">First session: Saturday 10 October 2026, 21:00 Makkah time, then every two weeks.</p></noscript>
+    <div class="luma-embed">
+      <iframe src="https://luma.com/embed/calendar/cal-36O2hpsJMdKEPn0/events?lt=light" title="Upcoming MEHBARA sessions on Luma" loading="lazy" allowfullscreen></iframe>
     </div>
     <div class="watch-links">
     <a class="watch" href="https://luma.com/mehbara" target="_blank" rel="noopener">
@@ -481,19 +462,12 @@ const CONFIG = {
   TALK_FORM_URL:  "https://docs.google.com/forms/d/e/1FAIpQLSdsoMvgXUYU3taSwCaeWg75qGdFXDVtNjnIq0pDYZK7XvloUQ/viewform",
   // The shareable link shown under the embedded form.
   TALK_FORM_SHORT: "https://forms.gle/dNg4ff1gCVUWJF2M7",
-  // Optional: the Google Form field id of a "Preferred slot" question (e.g. "entry.123456789").
-  // When set, "Apply for this slot" opens the form with that date filled in.
-  SLOT_FIELD:     "entry.1213252305",
   CONTACT_EMAIL:  "mehbaraai@gmail.com",
   // Luma calendar: people follow it to hear about new sessions, register, and get reminders.
   LUMA_URL:       "https://luma.com/mehbara",
   FIRST_SESSION:  "2026-10-10",  // YYYY-MM-DD, a Saturday
   SESSION_TIME:   "21:00",       // Makkah time (UTC+3, no daylight saving), 24h
-  EVERY_DAYS:     14,
-  SHOW_SLOTS:     6,
-  // Confirmed sessions by date. A date left out shows as an open slot.
-  // "2026-10-10": { title: "Paper title", theme: "Arabic NLP", link: "https://arxiv.org/abs/..." }
-  SESSIONS: {}
+  EVERY_DAYS:     14
 };
 
 const STRINGS = { en: {}, ar: {
@@ -540,13 +514,11 @@ const STRINGS = { en: {}, ar: {
   nlT:"تقويم الجلسات", nlD:"تابع محبرة على Luma لتصلك رسالة عند الإعلان عن كل جلسة، وسجّل حضورك بنقرة واحدة، وتلقَّ تذكيراً برابط الانضمام.",
   nlGo:"تابعنا على Luma", lumaReg:"سجّل في الجلسات على Luma", soon:"قريباً",
   emT:"البريد الإلكتروني", emD:"للاستفسارات والأفكار والشراكات:",
-  evOpenTitle:"موعد متاح", evOpen:"متاح", evTaken:"مؤكَّد", evApply:"تقدَّم لهذا الموعد", evPaper:"الورقة",
-  evOpenDesc:"اقترح ورقة لهذا الموعد", mk:"بتوقيت مكة المكرمة"
+  mk:"بتوقيت مكة المكرمة"
 }};
 const EXTRA_EN = {
   nlGo:"Follow on Luma",
-  evOpenTitle:"Open slot", evOpen:"Open", evTaken:"Confirmed", evApply:"Apply for this slot", evPaper:"Paper",
-  evOpenDesc:"Propose a paper for this date", mk:"Makkah time"
+  mk:"Makkah time"
 };
 
 const nodes = [...document.querySelectorAll("[data-i18n]")];
@@ -586,60 +558,18 @@ function nowDate(){
   const d = q ? new Date(q.length <= 10 ? q + "T12:00:00Z" : q) : new Date();
   return isNaN(d) ? new Date() : d;
 }
-const ymdOf = date => new Intl.DateTimeFormat("en-CA",{timeZone:TZ}).format(date);
 
-function formLink(slotYmd){
-  const u = CONFIG.TALK_FORM_URL;
-  if (!u || !slotYmd || !CONFIG.SLOT_FIELD) return u;
-  return u + (u.includes("?") ? "&" : "?") + "usp=pp_url&" + encodeURIComponent(CONFIG.SLOT_FIELD) + "=" + encodeURIComponent(slotYmd);
-}
-
+// The session list itself comes from the Luma embed; this only fills in the local start time.
 function renderSessions(){
-  const host = document.getElementById("events");
   const now = nowDate().getTime();
   const [y, m, d] = CONFIG.FIRST_SESSION.split("-").map(Number);
-  const list = [];
-  for (let i = 0; list.length < CONFIG.SHOW_SLOTS && i < 500; i++){
+  for (let i = 0; i < 500; i++){
     const at = makkahInstant(y, m, d + i * CONFIG.EVERY_DAYS, CONFIG.SESSION_TIME);
-    if (at.getTime() + 2 * 3600e3 >= now) list.push(at);
-  }
-  host.textContent = "";
-  const arrow = '<svg class="arrow-i" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
-  const button = (href, label, primary) => {
-    const a = document.createElement("a");
-    a.className = "btn btn-sm " + (primary ? "btn-primary" : "btn-ghost");
-    a.href = href; a.target = "_blank"; a.rel = "noopener";
-    a.innerHTML = "<span></span>" + arrow; a.firstChild.textContent = label;
-    return a;
-  };
-  list.forEach((at, n) => {
-    const ymd = ymdOf(at), s = CONFIG.SESSIONS[ymd];
-    const row = document.createElement("div");
-    row.className = "event" + (n === 0 ? " first" : "");
-    const badge = document.createElement("div"); badge.className = "badge";
-    const bd = document.createElement("b"); bd.textContent = fmt(at, TZ, {day:"numeric"});
-    const bm = document.createElement("span"); bm.textContent = fmt(at, TZ, {month:"short"});
-    badge.append(bd, bm);
-    const body = document.createElement("div");
-    const h = document.createElement("h3");
-    h.textContent = s && s.title ? s.title : t("evOpenTitle");
-    const st = document.createElement("span");
-    st.className = "status " + (s ? "taken" : "open"); st.textContent = s ? t("evTaken") : t("evOpen");
-    h.appendChild(st);
-    const meta = document.createElement("p"); meta.className = "meta";
-    meta.textContent = fmt(at, TZ, {weekday:"long"}) + " · " + fmt(at, TZ, HM) + " " + t("mk");
-    body.append(h, meta);
-    const theme = s ? (s.theme || "") : t("evOpenDesc");
-    if (theme){ const th = document.createElement("span"); th.className = "theme"; th.textContent = theme; body.appendChild(th); }
-    row.append(badge, body);
-    if (s && s.link) row.appendChild(button(s.link, t("evPaper"), false));
-    else if (!s && CONFIG.TALK_FORM_URL) row.appendChild(button(formLink(ymd), t("evApply"), n === 0));
-    host.appendChild(row);
-  });
-  if (list.length){
-    const txt = fmt(list[0], TZ, HM) + " " + t("mk");
+    if (at.getTime() + 2 * 3600e3 < now) continue;
+    const txt = fmt(at, TZ, HM) + " " + t("mk");
     document.getElementById("slot-time").textContent = txt;
     document.getElementById("fact-time").textContent = txt;
+    return;
   }
 }
 
